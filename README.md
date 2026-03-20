@@ -1,8 +1,4 @@
-# CS361SortingHashing
-
-
 # CS361 – Sorting and Hashing
-**Spring 2026 | University of New Mexico**
 
 ---
 
