@@ -77,45 +77,15 @@ def test_determinism(bf, test_items, num_trials=5):
         print("FAILURE: The hash function returned different indices for the same input.")
     print("-" * 30 + "\n")
 
-def test_collision_resistance(bf, num_items=10000):
-    """
-    Tests that a large number of different inputs generate 
-    different sets of indices (testing for total hash collisions).
-    """
-    print(f"\n--- Testing Hash Collision Resistance ---")
-    print(f"Generating {num_items} unique items...")
+def test_false_positive_rate(bf, num_checks=100000):
+    false_positives = 0
+    print(f"Checking {num_checks} random strings against the password filter...")
     
-    unique_index_sets = set()
-    collisions = 0
-    
-    for i in range(num_items):
-        # Generate a unique string for every iteration
-        item = f"unique_test_string_{i}"
-        
-        # Get indices and convert the list to a tuple. 
-        # We must use a tuple because Python sets require immutable/hashable elements.
-        indices = tuple(bf.get_hash_indices(item))
-        
-        # If the exact tuple of indices is already in our set, we hit a collision
-        if indices in unique_index_sets:
-            collisions += 1
-        else:
-            unique_index_sets.add(indices)
+    for i in range(num_checks):
+        # Create a string that is highly unlikely to be in the password list
+        unseen_item = f"random_test_hash_{i}_xyz"
+        if bf.check(unseen_item):
+            false_positives += 1
             
-    collision_rate = (collisions / num_items) * 100
-    
-    print(f"Total items tested: {num_items}")
-    print(f"Unique index sets generated: {len(unique_index_sets)}")
-    print(f"Exact tuple collisions detected: {collisions}")
-    print(f"Collision rate: {collision_rate:.4f}%")
-    
-    # We expect 0 exact tuple collisions for a well-distributed hash
-    # over a bit array sized for 100k items.
-    passed = (collisions == 0)
-    
-    print("-" * 30)
-    if passed:
-        print(f"SUCCESS: All {num_items} items produced a unique signature of indices!")
-    else:
-        print("WARNING: Some items produced the exact same indices. This increases false positive rates.")
-    print("-" * 30 + "\n")
+    actual_error_rate = (false_positives / num_checks)
+    print(f"Actual False Positive Rate: {actual_error_rate * 100:.4f}%")
