@@ -2,9 +2,6 @@
     Heavily inspired by the FNV hash function created by Glenn Fowler, Landon Curt Noll, and Kiem-Phong Vo
 """
 import math
-# from test_bloom_filter import test_k_indices
-# from test_bloom_filter import test_determinism
-from test_bloom_filter import test_false_positive_rate
 
 class bloom_filter:
     def __init__(self, hash_file, acceptable_error_rate):
@@ -16,8 +13,10 @@ class bloom_filter:
         self.hash_count = get_optimal_hash_count(self.size, file_size) 
         # Adding 7 here to effectively "ceiling" when doing integer division
         num_bytes = (self.size + 7) // 8
-        self.bit_array = bytearray(num_bytes)
+        self.byte_array = bytearray(num_bytes)
+        print(f"Hashing...")
         self.load(hash_file)
+        print("-" * 30)
         
     def fnv1a_hash(self, item, seed):
         """
@@ -68,7 +67,7 @@ class bloom_filter:
             # Find which bit within that byte to flip
             bit_offset = index % 8
             # Use a bitmask (1 shifted by offset) to set the bit to 1
-            self.bit_array[byte_index] |= (1 << bit_offset)
+            self.byte_array[byte_index] |= (1 << bit_offset)
 
     def check(self, item):
         """
@@ -78,7 +77,7 @@ class bloom_filter:
             byte_index = index // 8
             bit_offset = index % 8
             # Check if the specific bit is 0 using bitwise AND
-            if not (self.bit_array[byte_index] & (1 << bit_offset)):
+            if not (self.byte_array[byte_index] & (1 << bit_offset)):
                 # Return false if confident bit doesn't exist
                 return False
                 
@@ -89,7 +88,7 @@ class bloom_filter:
         Load given file into hash
         """
         try:
-            with open(file_path, 'r', encoding='utf-8') as infile:
+            with file_path.open('r', encoding='utf-8') as infile:
                 
                 for file_size, line in enumerate(infile):
                     self.add(line.strip())
@@ -97,7 +96,7 @@ class bloom_filter:
             print(f"Success! {file_size + 1} lines have been hashed.")
         
         except FileNotFoundError:
-            print(f"Error: The file '{INPUT_FILE_PATH}' was not found.")
+            print(f"Error: The file '{file_path}' was not found.")
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
                 
@@ -106,7 +105,7 @@ class bloom_filter:
 def num_lines(file_path):
     num_lines = 0
     try:
-        with open(file_path, 'r', encoding='utf-8') as infile:
+        with file_path.open('r', encoding='utf-8') as infile:
             
             for line in enumerate(infile):
                 num_lines = num_lines + 1
@@ -114,7 +113,7 @@ def num_lines(file_path):
             print(f"{num_lines} lines have been counted.")
     
     except FileNotFoundError:
-        print(f"Error: The file '{INPUT_FILE_PATH}' was not found.")
+        print(f"Error: The file '{file_path}' was not found.")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     return num_lines
@@ -141,28 +140,6 @@ def get_optimal_hash_count(m, n):
     print(f"Optimal hash count: {k}")
     return int(math.ceil(k))
 
-
-
-if __name__ == "__main__":
-    INPUT_FILE_PATH = 'part2_bloom_filter\\test_cases\\1MPasswords.txt'
-    acceptable_error_rate = 0.01   # 1% error rate
-    bf = bloom_filter(INPUT_FILE_PATH, acceptable_error_rate)
-    # Check for items
-    
-    print(f"'00000019C61335B410967582B2024D78A8A59D68' present?  {bf.check('00000019C61335B410967582B2024D78A8A59D68')}")     # Output: True
-    print(f"'0000001C5111E4CE5FCCE9C259739925AAA5C819' present?  {bf.check('0000001C5111E4CE5FCCE9C259739925AAA5C819')}")     # Output: True
-    print(f"'000189600E9A1042C7B5ED1C2A84704B099F978E' present?  {bf.check('000189600E9A1042C7B5ED1C2A84704B099F978E')}")     # Output: True
-    print(f"'000000005AD76SD555C1D6D771DE417A4B87E4B4' present?  {bf.check('000000005AD76SD555C1D6D771DE417A4B87E4B4')}")     # Output: False
-
-    sample_items = [
-        "00000019C61335B410967582B2024D78A8A59D68",
-        "apple",
-        "banana",
-        "a_very_long_password_string_1234567890"
-    ]
-    # test_k_indices(bf, sample_items)
-    # test_determinism(bf, sample_items, 10)
-    test_false_positive_rate(bf, 100000)
 
 
     
