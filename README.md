@@ -1,8 +1,22 @@
 # CS361 – Sorting and Hashing
 
 
----
+## Running Hashing Algorithm
+The hashing algorithm is contained in 'part2_bloom_filter.pyz' and the code can be viewed under 'part2_bloom_filter'. Python must be installed for the .pyz to run (Ver. Python 3.14.3)
 
+It can be run with the following commands:
+   python part2_bloom_filter.pyz
+   python3 part2_bloom_filter.pyz
+
+It runs our 4 testing methods:
+   -displays whether all indices are within bounds
+   -if our hash is deterministic
+   -false positive rate
+   -average query time.
+
+Outputs 'Done!' when finished.
+
+---
 
 ## Report
 
@@ -16,7 +30,7 @@ https://www.overleaf.com/project/69cc4768c4219a8aef8b6f63
 | Name | Code | Report Section |
 |------|------|----------------|
 | Rick | 3-way Merge Sort + benchmarking script (int & float timing) |  |
-| **Member B** | Hash functions (Phase 2) + Bloom Filter core (bit array, insert/query) |  |
+| Ethan | Hash functions (Phase 2) + Bloom Filter core (bit array, insert/query) |  |
 | **Member C** | Password checker (dataset loading, train/test splits) + Phase 5 analysis (false positive rate, memory, query timing) |  | 
 
 ---
