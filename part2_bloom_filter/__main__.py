@@ -7,10 +7,13 @@ from test_bloom_filter import (
     test_false_positive_rate, 
     test_query_time
 )
+from password_checker import password_checker
 
 if __name__ == "__main__":
     INPUT_FILE_PATH = resources.files(test_cases).joinpath('1MPasswords.txt')
     acceptable_error_rate = 0.01   # 1% error rate
+
+    print("\n\033[32mBloom Filter Initialization\033[0m\n")
     bf = bloom_filter(INPUT_FILE_PATH, acceptable_error_rate)
     
     sample_items = [
@@ -20,7 +23,9 @@ if __name__ == "__main__":
         "a_very_long_password_string_1234567890"
     ]
 
-    # Proof tests for bloom_filter
+    #### --- Bloom Filter Sanity Checks --- ####
+
+    print("\n\033[32mBloom Filter Sanity Checks\033[0m\n")
     
     test_k_indices(bf, sample_items)
     test_determinism(bf, sample_items, 100)
@@ -40,5 +45,14 @@ if __name__ == "__main__":
         print(f"An unexpected error occurred: {e}")
     
     test_query_time(bf, test_items)
+
+    #### --- Password Checker Tests --- ####
+
+    print("\n\033[32mPassword Checker Tests\033[0m\n")
+    
+    checker = password_checker(INPUT_FILE_PATH, acceptable_error_rate)
+    checker.test_false_positive_rate()
+    checker.test_query_time()
+    checker.test_memory_usage()
 
     print("Done!")

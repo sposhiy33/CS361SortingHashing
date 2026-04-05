@@ -4,13 +4,16 @@
 import math
 
 class bloom_filter:
-    def __init__(self, hash_file, acceptable_error_rate):
+    def __init__(self, hash_file, acceptable_error_rate, m=None, k=None):
         """
         Initialize the Bloom filter with a built-in Python bit array.
         """
         file_size = num_lines(hash_file)
-        self.size = get_optimal_size(file_size, acceptable_error_rate)
-        self.hash_count = get_optimal_hash_count(self.size, file_size) 
+
+        # set bit array size and hash count if provided, otherwise use optimal values
+        self.size = m if m else get_optimal_size(file_size, acceptable_error_rate)
+        self.hash_count = k if k else get_optimal_hash_count(self.size, file_size) 
+        
         # Adding 7 here to effectively "ceiling" when doing integer division
         num_bytes = (self.size + 7) // 8
         self.byte_array = bytearray(num_bytes)
