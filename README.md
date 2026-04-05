@@ -31,7 +31,9 @@ python3 part2_bloom_filter.pyz
 - Reports the false positive rate
 - Reports the average query time
 
-Outputs `Done!` when finished.---
+Outputs `Done!` when finished.
+
+---
 
 # For Team Members
 
