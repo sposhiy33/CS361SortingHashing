@@ -1,3 +1,12 @@
+"""
+This script is used to test the performance of the bloom filter on a dataset of passwords.
+False positive rate, query time, and memory usage are tested on a held out set of passwords (the test set).
+
+This file can be run as a standalone script to test the performance of the bloom filter, but mainly is meant to be imported as a module.
+
+Run the __main__.py file to get comprehensive testing results and sanity checks.
+"""
+
 import sys
 import tempfile
 import time
@@ -8,7 +17,7 @@ from bloom_filter import bloom_filter
 
 class password_checker:
 
-    def __init__(self, hash_file, acceptable_error_rate):
+    def __init__(self, hash_file, acceptable_error_rate, m=None, k=None):
 
         # split into test and train sets
         self.split = 0.8
@@ -19,7 +28,7 @@ class password_checker:
 
         train_path = self._write_train_file(self.train_set)
         try:
-            self.bloom_filter = bloom_filter(train_path, acceptable_error_rate)
+            self.bloom_filter = bloom_filter(train_path, acceptable_error_rate, m, k)
         finally:
             train_path.unlink(missing_ok=True)
 
@@ -60,7 +69,10 @@ class password_checker:
         for password in self.test_set:
             if self.bloom_filter.check(password.strip()):
                 false_positives += 1
-        return false_positives / len(self.test_set) * 100
+
+        rate = false_positives / len(self.test_set) * 100
+        print(f"\nFalse positive rate: {rate}%")
+        return rate
 
     def test_query_time(self):
         """
@@ -77,7 +89,10 @@ class password_checker:
         end_time = time.perf_counter()
 
         elapsed = end_time - start_time
-        return elapsed, elapsed / len(sample)
+        avg_time = elapsed / len(sample)
+        print(f"\nQuery time: {elapsed} seconds")
+        print(f"Average query time: {avg_time} seconds")
+        return elapsed, avg_time
 
     def test_memory_usage(self):
         """
@@ -88,6 +103,8 @@ class password_checker:
 
         bloom_filter_memory = sys.getsizeof(self.bloom_filter)
         traditional_set_memory = sys.getsizeof(traditional_set)
+        print(f"\nBloom filter memory usage: {bloom_filter_memory} bytes")
+        print(f"Traditional set memory usage: {traditional_set_memory} bytes")
         return bloom_filter_memory, traditional_set_memory
 
 
@@ -95,12 +112,7 @@ if __name__ == "__main__":
     hash_file = "test_cases/1MPasswords.txt"
     acceptable_error_rate = 0.01
     checker = password_checker(hash_file, acceptable_error_rate)
-    print(f"False positive rate: {checker.test_false_positive_rate()}%")
-    print("-" * 30)
-    print(f"Query time: {checker.test_query_time()[0]} seconds")
-    print(f"Average query time: {checker.test_query_time()[1]} seconds")
-    print(f"Memory usage: {checker.test_memory_usage()[0]} bytes")
-    print("-" * 30)
-    print(f"Traditional set memory usage: {checker.test_memory_usage()[1]} bytes")
-    print("-" * 30)
+    checker.test_false_positive_rate()
+    checker.test_query_time()
+    checker.test_memory_usage()
     print("Done!")
