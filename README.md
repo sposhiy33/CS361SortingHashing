@@ -1,7 +1,7 @@
 # CS361 – Sorting and Hashing
 
-
 ## Running Hashing Algorithm
+
 The hashing algorithm is contained in 'part2_bloom_filter.pyz' and the code can be viewed under 'part2_bloom_filter'. Python must be installed for the .pyz to run (Ver. Python 3.14.3)
 
 It can be run with the following commands:
@@ -20,18 +20,19 @@ Outputs 'Done!' when finished.
 
 ## Report
 
-https://www.overleaf.com/project/69cc4768c4219a8aef8b6f63
+[https://www.overleaf.com/project/69cc4768c4219a8aef8b6f63](https://www.overleaf.com/project/69cc4768c4219a8aef8b6f63)
 
 ---
 
-
 ## Team Sign-Up
 
-| Name | Code | Report Section |
-|------|------|----------------|
-| Rick | 3-way Merge Sort + benchmarking script (int & float timing) |  |
-| Ethan | Hash functions (Phase 2) + Bloom Filter core (bit array, insert/query) |  |
-| **Member C** | Password checker (dataset loading, train/test splits) + Phase 5 analysis (false positive rate, memory, query timing) |  | 
+
+| Name  | Code                                                                                                                 | Report Section |
+| ----- | -------------------------------------------------------------------------------------------------------------------- | -------------- |
+| Rick  | 3-way Merge Sort + benchmarking script (int & float timing)                                                          |                |
+| Ethan | Hash functions (Phase 2) + Bloom Filter core (bit array, insert/query)                                               |                |
+| Shrey | Password checker (dataset loading, train/test splits) + Phase 5 analysis (false positive rate, memory, query timing) |                |
+
 
 ---
 
@@ -42,30 +43,23 @@ All changes go through pull requests. Do **not** push directly to `main`.
 ### Workflow
 
 1. **Clone the repo**
-   ```bash
+  ```bash
    git clone https://github.com/rickwgarcia/CS361SortingHashing.git
    cd CS361SortingHashing
-   ```
-
+  ```
 2. **Create a branch** for your work
-   ```bash
+  ```bash
    git checkout -b your-name/feature-description
    # e.g. git checkout -b alex/merge-sort
-   ```
-
+  ```
 3. **Make your changes**, then commit
-   ```bash
+  ```bash
    git add .
    git commit -m "Short description of what you did"
-   ```
-
+  ```
 4. **Push your branch**
-   ```bash
+  ```bash
    git push origin your-name/feature-description
-   ```
-
+  ```
 5. **Open a Pull Request** on GitHub into `main` and wait for review.
-
-
-
 
