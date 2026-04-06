@@ -101,7 +101,7 @@ class password_checker:
         # set up traditional set for comparison
         traditional_set = set(line.strip() for line in self.test_set)
 
-        bloom_filter_memory = sys.getsizeof(self.bloom_filter)
+        bloom_filter_memory = sys.getsizeof(self.bloom_filter.byte_array)
         traditional_set_memory = sys.getsizeof(traditional_set)
         print(f"\nBloom filter memory usage: {bloom_filter_memory} bytes")
         print(f"Traditional set memory usage: {traditional_set_memory} bytes")
